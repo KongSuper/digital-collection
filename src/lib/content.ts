@@ -94,6 +94,18 @@ export function getCollection(category: string, slug: string): Collection | null
   return getCollections().find(c => c.category === category && c.slug === slug) || null;
 }
 
+/**
+ * 把 YAML 可能解析为 Date 对象的日期转为字符串
+ * gray-matter 底层用 js-yaml，会把 2024-06-22 自动转成 Date 对象，
+ * React 只能渲染字符串/数字，不能渲染 Date，需提前转换
+ */
+function normalizeDate(value: any): string {
+  if (value instanceof Date) {
+    return value.toISOString().slice(0, 10); // Date → "2024-06-22"
+  }
+  return String(value || '');
+}
+
 // ========== 文章相关 API ==========
 
 /** 获取所有文章，按日期倒序排列（最新的在前） */
@@ -103,7 +115,7 @@ export function getPosts(): Post[] {
     .map(f => ({
       frontmatter: {
         title: f.frontmatter.title || f.slug,
-        date: f.frontmatter.date || '',
+        date: normalizeDate(f.frontmatter.date),
         tags: f.frontmatter.tags || [],
         excerpt: f.frontmatter.excerpt || '',
       },
@@ -122,7 +134,7 @@ export function getPost(slug: string): Post | null {
   return {
     frontmatter: {
       title: parsed.frontmatter.title || slug,
-      date: parsed.frontmatter.date || '',
+      date: normalizeDate(parsed.frontmatter.date),
       tags: parsed.frontmatter.tags || [],
       excerpt: parsed.frontmatter.excerpt || '',
     },
