@@ -18,9 +18,9 @@ export default function Giscus() {
     <div className="mt-16 pt-8 border-t border-gray-200">
       <GiscusReact
         repo="kongsuper/blog-comments"
-        repoId="YOUR_REPO_ID"
+        repoId="R_kgDOTCaEVg"
         category="General"
-        categoryId="YOUR_CATEGORY_ID"
+        categoryId="DIC_kwDOTCaEVs4C_tEj"
         mapping="pathname"
         strict="0"
         reactionsEnabled="1"
